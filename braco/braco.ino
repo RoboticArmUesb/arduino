@@ -1,10 +1,11 @@
 
 #include "ajuste.h"
+#include "mover.h"
 
-int LAMBDA = 90;
-int ALPHA = 90;
-int BETA = 90;
-int GAMA = 90;
+
+float X = 0;
+float Y = 23.15;
+float Z = 26;
 char value;
 int flag = 0;
 bool fechado = false;
@@ -12,24 +13,11 @@ bool fechado = false;
 void setup() {
   Serial.begin(9600);
   iniciar();
-  configure();
+  podeMover(X, Y, Z);
   abrirGarra();
 }
 
-void configure() {
-  lambda(LAMBDA);
-  alpha(ALPHA);
-  beta(BETA);
-  gama(GAMA);
 
-  Serial.print("lambda: ");
-  Serial.print(LAMBDA);
-  Serial.print("alpha: ");
-  Serial.print(ALPHA);
-  Serial.print("beta: ");
-  Serial.print(BETA);
-
-}
 
 
 void loop() {
@@ -37,54 +25,51 @@ void loop() {
     value = Serial.read();
     Serial.flush();
 
-    switch (value) {      
-      case '0': 
-        BETA += 2; 
-        flag = 1; 
+    switch (value) {
+      case '0':
+        X++;
+        flag = 1;
+        break;
+
+      case '1':
+        X--;
+        flag = 1;
+        break;
+
+      case '2':
+        Y++;
+        flag = 1;
         break;
         
-      case '1':       
-        ALPHA += 2;   
-        flag = 1; 
+      case '3':
+        Y--;
+        flag = 1;
         break;
-        
-      case '2': 
-        GAMA += 1; 
-        flag = 1;   
+
+      case '4':
+        if (fechado) {
+          abrirGarra();
+        }
+        else {
+          fecharGarra();
+        }
+        fechado = !fechado;
         break;
-      case '3': 
-        LAMBDA -= 2; 
-        flag = 1; 
+
+      case '5':
+        Z++;
         break;
-      case '4': 
-      if (fechado){
-        abrirGarra();
-      }
-      else{
-        fecharGarra();
-      }
-      fechado = !fechado;
-      
+
+      case '6':
+        Z--;
+        flag = 1;
         break;
-      case '5': 
-        LAMBDA += 2; 
-        flag = 1; 
-        break;
-      case '6':      
-        BETA -= 2; 
-        flag = 1; 
-        break;
-      case '7':      
-        ALPHA -= 2; 
-        flag = 1; 
-      case '8':      
-        GAMA -= 1; 
-        flag = 1; 
-        break;
+
     }
 
     if (flag)
-      configure();
+      podeMover(X, Y, Z);
+    mover();
     flag = false;
   }
 

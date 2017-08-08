@@ -13,7 +13,7 @@ void iniciar(){
   servoOmbroDireto.attach(26);
   servoOmbroInverso.attach(30);
   servoCotovelo.attach(34);
-  servoPulso.attach(38);
+  servoPulso.attach(11);
   servoGarra.attach(42);
   
 }
